@@ -2,7 +2,6 @@ import React from "react";
 import { useParams } from "react-router";
 function PackageDependencies() {
   const { slug } = useParams();
-  console.log(slug);
 
   return (
     <div>
@@ -26,16 +25,16 @@ function PackageDependencies() {
                   <p>Product</p>
                   <nav className="mb-10 list-none">
                     <li>
-                      <a href="#">Email Templates</a>
+                      <a href="/">Email Templates</a>
                     </li>
                     <li>
-                      <a href=" #">Web Templates</a>
+                      <a href="/">Web Templates</a>
                     </li>
                     <li>
-                      <a href="#">Figma Files</a>
+                      <a href="/">Figma Files</a>
                     </li>
                     <li>
-                      <a href=" #">Sketch Files</a>
+                      <a href="/">Sketch Files</a>
                     </li>
                   </nav>
                 </div>
@@ -43,16 +42,16 @@ function PackageDependencies() {
                   <p>Company</p>
                   <nav className="mb-10 list-none">
                     <li>
-                      <a href="#">Home</a>
+                      <a href="/">Home</a>
                     </li>
                     <li>
-                      <a href=" #">About</a>
+                      <a href="/">About</a>
                     </li>
                     <li>
-                      <a href="#">Carriers</a>
+                      <a href="/">Carriers</a>
                     </li>
                     <li>
-                      <a href=" #">Pricing</a>
+                      <a href="/">Pricing</a>
                     </li>
                   </nav>
                 </div>

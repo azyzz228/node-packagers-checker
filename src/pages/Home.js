@@ -47,12 +47,20 @@ function Home() {
   return (
     <div>
       <div className="p-20 flex flex-col justify-start items-start gap-12 bg-slate-50">
-        <h1 className="text-5xl text-neutral-900 ">Hello</h1>
+        <h1 className="text-5xl font-bold text-neutral-900 uppercase">
+          node packages checker
+        </h1>
+        <p className="text-gray-500 ">
+          {" "}
+          Click{" "}
+          <span className="text-blue-500 font-medium uppercase">load </span>to
+          load packages
+        </p>
         <button
           className="p-4 text-blue-100 bg-blue-600 rounded-lg hover:bg-blue-700 active:bg-blue-900"
           onClick={() => handleSubmit()}
         >
-          Submit
+          Load
         </button>
       </div>
 
