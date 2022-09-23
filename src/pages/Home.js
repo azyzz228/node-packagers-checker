@@ -1,46 +1,61 @@
 import axios from "axios";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import convert_date from "../helpers/convert_date";
+import package_info_object from "../helpers/package_info_object";
 
 function Home() {
   const [packages, setPackages] = useState([]);
+  const githubLink = useRef()
+  const branch = useRef()
   let arr = [];
-  function package_info(name, description, dependencies, github, issues) {
-    return {
-      name,
-      description,
-      dependencies,
-      github,
-      issues,
-    };
-  }
+
   console.log(packages);
+
+
   const handleSubmit = async () => {
+    let username, repo;
+    username = githubLink.current.value.split("/")[3];
+    repo = githubLink.current.value.split("/")[4];
+
     const res = await axios.get(
-      "https://raw.githubusercontent.com/azyzz228/hsl-color-picker/master/package.json"
+      `https://raw.githubusercontent.com/${username}/${repo}/${branch.current.value}/package.json`
     );
     if (res.status !== 200) {
       alert("You provided broken link");
     }
 
-    console.log(Object.keys(res.data.dependencies));
 
-    let npm_link = await axios.get(
-      "https://api.npms.io/v2/package/tailwindcss"
-    );
+    let array_dependencies = Object.keys(res.data.dependencies);
+    array_dependencies.map((item) => {
 
-    let metadata = npm_link.data.collected.metadata;
+      axios.get(`
+      https://api.npms.io/v2/package/${item}
+      `).then((res) => {
+        let metadata = res.data.collected.metadata;
+        console.warn(metadata);
+        arr.push(
+          package_info_object(
+            metadata.name,
+            metadata.description,
+            Object.keys(metadata.dependencies),
+            metadata.links.repository,
+            metadata.links.bugs,
+            convert_date(metadata.date),
+            res.data.collected.github.starsCount,
+            res.data.collected.github.forksCount,
+            res.data.collected.github.subscribersCount,
+          )
+        );
+      })
+    })
 
-    arr.push(
-      package_info(
-        metadata.name,
-        metadata.description,
-        Object.keys(metadata.dependencies),
-        metadata.links.repository,
-        metadata.links.bugs
-      )
-    );
-    setPackages(arr);
     console.log(arr);
+
+    setTimeout(() => {
+      setPackages(arr);
+    }, 500);
+
+
 
     //const $ = cheerio.load('<h2 class="title">Hello world</h2>');
   };
@@ -48,22 +63,31 @@ function Home() {
     <div>
       <div className="p-20 flex flex-col justify-start items-start gap-12 bg-slate-50">
         <h1 className="text-5xl text-neutral-900 ">Hello</h1>
-        <button
-          className="p-4 text-blue-100 bg-blue-600 rounded-lg hover:bg-blue-700 active:bg-blue-900"
-          onClick={() => handleSubmit()}
-        >
-          Submit
-        </button>
+        <div className="flex flex-row gap-8">
+          <input type="text" ref={githubLink} className="outline-none border border-blue-200 shadow-md p-2 rounded-lg w-[450px]" name="githubLink" id="" placeholder="https://github.com/azyzz228/hsl-color-picker" />
+
+          <input type="text" ref={branch} className="outline-none border border-blue-200 shadow-md p-2 rounded-lg w-24" name="branch" id="" placeholder="master" />
+
+          <button
+            className="p-4 text-blue-100 bg-blue-600 rounded-lg hover:bg-blue-700 active:bg-blue-900"
+            onClick={() => handleSubmit()}
+          >
+            Submit
+          </button>
+        </div>
+
       </div>
 
-      <div className="flex flex-row px-10 py-20 justify-start items-center container mx-auto">
+      <h1 className="px-20 text-3xl text-neutral-900 mt-10">List of your packages:</h1>
+      <div className=" px-10 pb-20 pt-10 grid grid-cols-3 gap-12 container mx-auto">
+
         {packages.length === 0 ? (
           <p>Its empty</p>
         ) : (
           packages.map((item, index) => (
             <div
               key={index}
-              class="max-w-md rounded-t-lg rounded-b-md border border-t-4 border-slate-100 border-t-blue-400 px-8 py-4 shadow-lg"
+              class="max-w-3xl rounded-t-lg rounded-b-md border border-t-4 border-slate-100 border-t-blue-400 px-8 py-4 shadow-lg"
             >
               <div class="flex flex-row items-center justify-between border-b pb-4">
                 <a href={`/package-dependencies/${item.name}`}>
@@ -73,37 +97,70 @@ function Home() {
                 </a>
                 <div class="flex flex-col items-end">
                   <p class="text-sm text-slate-600">Last updated</p>
-                  <p class="text-lg font-bold text-slate-800">10 days ago</p>
+                  <p class="text-lg font-bold text-slate-800">{item.date}</p>
                 </div>
               </div>
 
               <p class="border-b border-slate-100 py-4 text-slate-700">
                 {item.description}
               </p>
+              <p className="text-slate-600 py-4 flex justify-center">
+                Github Stats
+              </p>
+              <div class="flex flex-row items-center justify-between py-4 text-xs text-slate-700" >
+                <p className="flex flex-row items-center gap-1"><i className="fa-solid fa-star text-base text-[#9c7140]"></i> Stars: <span className="text-yellow-900 text-lg font-semibold">{item.starsCount}</span></p>
+
+                <p className="flex flex-row items-center gap-1"><i className="fa-solid fa-code-commit text-base text-[#9c7140]"></i> Forks: <span className="text-yellow-900 text-lg font-semibold">{item.forksCount}</span></p>
+
+                <p className="flex flex-row items-center gap-1"><i className="fa-solid fa-user-group text-base text-[#9c7140]"></i> Subscr: <span className="text-yellow-900 text-lg font-semibold">{item.subscribersCount}</span></p>
+              </div>
+
               <div class="flex flex-row items-center justify-between py-4">
-                <a href={`${item.issuesLink}`}>
-                  {" "}
+                <a href={`${item.issues}`}>
+
                   <p class="text-red-900">Issues</p>
                 </a>
                 <p class="text-xl font-bold text-red-700">78</p>
               </div>
 
               <p class="pb-3 text-slate-700">Dependencies:</p>
-              <div class="grid grid-cols-3 place-items-start items-center gap-4">
-                {item.dependencies.map((i, k) => (
-                  <p
-                    key={k}
-                    class="col-span-1 rounded-full bg-slate-50 py-1 px-4 font-semibold text-slate-700"
-                  >
-                    {i}
-                  </p>
-                ))}
+              <div class="grid grid-cols-2 place-items-start items-center gap-4">
+                {item.dependencies.map((i, k) => {
+
+                  if (i.includes('@')) {
+
+                    return (
+                      <a href={`/package-dependencies/${i.split("/")[0].slice(1)}`} key={k}>
+                        <p
+
+                          class="col-span-1 rounded-full bg-slate-50 py-1 px-4 font-semibold text-slate-700"
+                        >
+                          {i}
+                        </p>
+                      </a>
+                    )
+                  }
+                  else {
+                    return (
+                      <a href={`/package-dependencies/${i}`} key={k}>
+                        <p
+
+                          class="col-span-1 rounded-full bg-slate-50 py-1 px-4 font-semibold text-slate-700"
+                        >
+                          {i}
+                        </p>
+                      </a>
+                    )
+                  }
+
+
+                })}
               </div>
             </div>
           ))
         )}
       </div>
-    </div>
+    </div >
   );
 }
 
