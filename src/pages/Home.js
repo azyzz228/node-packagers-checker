@@ -1,22 +1,10 @@
 import React, { useState } from 'react'
 import { useRef } from 'react';
 import { useEffect } from 'react';
-import {
-    RecoilRoot,
-    atom,
-    selector,
-    useRecoilState,
-    useRecoilValue,
-} from 'recoil';
 import PackageInfo from '../components/PackageInfo'
 
 
-
-//const mappedDependenciesValue = useRecoilValue(mappedDependencies)
-
 function Home() {
-
-    //const [dependencies, setDependencies] = useRecoilState(dependenciesState)
 
     const [repos, setRepos] = useState([])
     const [finished, setFinished] = useState(false)
