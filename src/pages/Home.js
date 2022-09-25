@@ -8,57 +8,57 @@ function Home() {
   const githubLink = useRef()
   const branch = useRef()
   let arr = [];
+  let p_arr = [];
+  let github, metadata;
 
-  console.log(packages);
+  async function jsonData(url) { // (1)
+    let res = await fetch(url); // (2)
 
+    if (res.status == 200) {
+      let json = await res.json(); // (3)
+      return json;
+    }
+
+    throw new Error(res.status);
+  }
+
+  async function dependencies(item) {
+    if (item.includes("@")) {
+      let p = item.split("/")[0].slice(1)
+      if (!p_arr.includes(p)) {
+        return await jsonData(`https://api.npms.io/v2/package/${p}`);
+      }
+    } else if (!item.includes("@")) {
+      return await jsonData(`https://api.npms.io/v2/package/${item}`);
+    }
+  }
 
   const handleSubmit = async () => {
     let username, repo;
     username = githubLink.current.value.split("/")[3];
     repo = githubLink.current.value.split("/")[4];
 
-    const res = await axios.get(
-      `https://raw.githubusercontent.com/${username}/${repo}/${branch.current.value}/package.json`
-    );
-    if (res.status !== 200) {
-      alert("You provided broken link");
-    }
+    fetch(`https://raw.githubusercontent.com/${username}/${repo}/${branch.current.value}/package.json`)
+      .then(function (response) {
+
+        return response.json()
+      }
+      ).then(res => {
+        let array_dependencies = Object.keys(res.dependencies);
+
+        Promise.all(array_dependencies.map(dependencies)
+        ).then(data => {
+
+          setPackages(data)
+          console.log(data);
+
+        });
 
 
-    let array_dependencies = Object.keys(res.data.dependencies);
-    array_dependencies.map((item) => {
-
-      axios.get(`
-      https://api.npms.io/v2/package/${item}
-      `).then((res) => {
-        let metadata = res.data.collected.metadata;
-        console.warn(metadata);
-        arr.push(
-          package_info_object(
-            metadata.name,
-            metadata.description,
-            Object.keys(metadata.dependencies),
-            metadata.links.repository,
-            metadata.links.bugs,
-            convert_date(metadata.date),
-            res.data.collected.github.starsCount,
-            res.data.collected.github.forksCount,
-            res.data.collected.github.subscribersCount,
-          )
-        );
       })
-    })
 
-    console.log(arr);
+  }
 
-    setTimeout(() => {
-      setPackages(arr);
-    }, 500);
-
-
-
-    //const $ = cheerio.load('<h2 class="title">Hello world</h2>');
-  };
   return (
     <div>
       <div className="p-20 flex flex-col justify-start items-start gap-12 bg-slate-50">
@@ -108,15 +108,15 @@ function Home() {
                 Github Stats
               </p>
               <div class="flex flex-row items-center justify-between py-4 text-xs text-slate-700" >
-                <p className="flex flex-row items-center gap-1"><i className="fa-solid fa-star text-base text-[#9c7140]"></i> Stars: <span className="text-yellow-900 text-lg font-semibold">{item.starsCount}</span></p>
+                <p className="flex flex-row items-center gap-1"><i className="fa-solid fa-star text-base text-[#9c7140]"></i><span className="text-yellow-900 text-lg font-semibold">{item.starsCount}</span></p>
 
-                <p className="flex flex-row items-center gap-1"><i className="fa-solid fa-code-commit text-base text-[#9c7140]"></i> Forks: <span className="text-yellow-900 text-lg font-semibold">{item.forksCount}</span></p>
+                <p className="flex flex-row items-center gap-1"><i className="fa-solid fa-code-commit text-base text-[#9c7140]"></i><span className="text-yellow-900 text-lg font-semibold">{item.forksCount}</span></p>
 
-                <p className="flex flex-row items-center gap-1"><i className="fa-solid fa-user-group text-base text-[#9c7140]"></i> Subscr: <span className="text-yellow-900 text-lg font-semibold">{item.subscribersCount}</span></p>
+                <p className="flex flex-row items-center gap-1"><i className="fa-solid fa-user-group text-base text-[#9c7140]"></i><span className="text-yellow-900 text-lg font-semibold">{item.subscribersCount}</span></p>
               </div>
 
               <div class="flex flex-row items-center justify-between py-4">
-                <a href={`${item.issues}`}>
+                <a href={`${item.issues}`} target="_blank">
 
                   <p class="text-red-900">Issues</p>
                 </a>
@@ -163,5 +163,4 @@ function Home() {
     </div >
   );
 }
-
 export default Home;
