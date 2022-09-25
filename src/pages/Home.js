@@ -110,29 +110,34 @@ function Home() {
           </a>
         </p>
 
-        <div className=" container mx-auto flex flex-col items-center mt-8">
+        <div className=" container mx-auto flex flex-col  items-center mt-8">
           <p className="mb-4 text-sm text-neutral-800">
             Insert a link to your Github repo with package.json file as well as
             branch name.
           </p>
-          <div className="flex flex-row gap-8">
-            <input
-              type="text"
-              ref={githubLink}
-              className="outline-none border border-blue-200 shadow-md p-2 rounded-lg w-[450px]"
-              name="githubLink"
-              id=""
-              placeholder="https://github.com/azyzz228/hsl-color-picker"
-            />
-
-            <input
-              type="text"
-              ref={branch}
-              className="outline-none border border-blue-200 shadow-md p-2 rounded-lg w-24"
-              name="branch"
-              id=""
-              placeholder="master"
-            />
+          <div className="flex flex-col sm:flex-col lg:flex-row gap-8">
+            <div className="flex flex-col flex-start gap-5">
+              <label for="githubLink">Enter repo name</label>
+              <input
+                type="text"
+                ref={githubLink}
+                className="outline-none border border-blue-200 shadow-md p-2 rounded-lg w-[300px] lg:w-[450px]"
+                name="githubLink"
+                id=""
+                placeholder="https://github.com/azyzz228/hsl-color-picker"
+              />
+            </div>
+            <div className="flex flex-col flex-start gap-5">
+              <label for="branch">Enter branch name</label>
+              <input
+                type="text"
+                ref={branch}
+                className="outline-none border border-blue-200 shadow-md p-2 rounded-lg w-[100%]"
+                name="branch"
+                id=""
+                placeholder="master"
+              />
+            </div>
 
             <button
               className="p-4 text-blue-100 bg-blue-600 rounded-lg hover:bg-blue-700 active:bg-blue-900"
