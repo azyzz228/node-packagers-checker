@@ -62,7 +62,6 @@ function Home() {
   return (
     <div>
       <div className="p-20 flex flex-col justify-start items-start gap-12 bg-slate-50">
-
         <h1 className="text-5xl text-neutral-900 ">Hello</h1>
         <div className="flex flex-row gap-8">
           <input type="text" ref={githubLink} className="outline-none border border-blue-200 shadow-md p-2 rounded-lg w-[450px]" name="githubLink" id="" placeholder="https://github.com/azyzz228/hsl-color-picker" />
