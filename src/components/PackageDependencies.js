@@ -62,44 +62,6 @@ function PackageDependencies() {
       console.warn(packages);
     })
 
-    // fetch(`https://api.npms.io/v2/package/${slug}`).then(function (response) {
-    //   return response.json();
-    // }).then((res) => {
-    //   metadata = res.collected.metadata
-    //   github = res.collected.github;
-    //   console.warn(res);
-    //   if (metadata.dependencies === undefined) {
-    //     setPackages(
-    //       package_info_object(
-    //         metadata.name,
-    //         metadata.description,
-    //         [],
-    //         metadata.links.repository,
-    //         metadata.links.bugs,
-    //         convert_date(metadata.date),
-    //         github.starsCount,
-    //         github.forksCount,
-    //         github.subscribersCount,
-    //       ))
-    //   }
-    //   else {
-    //     setPackages(
-    //       package_info_object(
-    //         metadata.name,
-    //         metadata.description,
-    //         Object.keys(metadata.dependencies),
-    //         metadata.links.repository,
-    //         metadata.links.bugs,
-    //         convert_date(metadata.date),
-    //         github.starsCount,
-    //         github.forksCount,
-    //         github.subscribersCount,
-    //       ))
-    //   }
-
-
-    // })
-
   }, [])
 
 
