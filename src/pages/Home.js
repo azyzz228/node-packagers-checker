@@ -5,13 +5,14 @@ import package_info_object from "../helpers/package_info_object";
 
 function Home() {
   const [packages, setPackages] = useState([]);
-  const githubLink = useRef()
-  const branch = useRef()
+  const githubLink = useRef();
+  const branch = useRef();
   let arr = [];
   let p_arr = [];
   let github, metadata;
 
-  async function jsonData(url) { // (1)
+  async function jsonData(url) {
+    // (1)
     let res = await fetch(url); // (2)
 
     if (res.status == 200) {
@@ -24,7 +25,7 @@ function Home() {
 
   async function dependencies(item) {
     if (item.includes("@")) {
-      let p = item.split("/")[0].slice(1)
+      let p = item.split("/")[0].slice(1);
       if (!p_arr.includes(p)) {
         return await jsonData(`https://api.npms.io/v2/package/${p}`);
       }
@@ -38,36 +39,46 @@ function Home() {
     username = githubLink.current.value.split("/")[3];
     repo = githubLink.current.value.split("/")[4];
 
-    fetch(`https://raw.githubusercontent.com/${username}/${repo}/${branch.current.value}/package.json`)
+    fetch(
+      `https://raw.githubusercontent.com/${username}/${repo}/${branch.current.value}/package.json`
+    )
       .then(function (response) {
-
-        return response.json()
-      }
-      ).then(res => {
+        return response.json();
+      })
+      .then((res) => {
         let array_dependencies = Object.keys(res.dependencies);
 
-        Promise.all(array_dependencies.map(dependencies)
-        ).then(data => {
-
-          setPackages(data)
+        Promise.all(array_dependencies.map(dependencies)).then((data) => {
+          setPackages(data);
           console.log(data);
-
         });
-
-
-      })
-
-  }
+      });
+  };
 
   return (
     <div>
       <div className="p-20 flex flex-col justify-start items-start gap-12 bg-slate-50">
-
         <h1 className="text-5xl text-neutral-900 ">Hello</h1>
-        <div className="flex flex-row gap-8">
-          <input type="text" ref={githubLink} className="outline-none border border-blue-200 shadow-md p-2 rounded-lg w-[450px]" name="githubLink" id="" placeholder="https://github.com/azyzz228/hsl-color-picker" />
+        <div className="flex lg:flex-row sm:flex-col flex-col gap-8">
+          <label for="githubLink">Enter Github Link below</label>
+          <input
+            type="text"
+            ref={githubLink}
+            className="outline-none border border-blue-200 shadow-md p-2 rounded-lg sm:w-300 lg:w-[450px]"
+            name="githubLink"
+            id=""
+            placeholder="https://github.com/azyzz228/hsl-color-picker"
+          />
 
-          <input type="text" ref={branch} className="outline-none border border-blue-200 shadow-md p-2 rounded-lg w-24" name="branch" id="" placeholder="master" />
+          <label for="githubLink">Enter branch name</label>
+          <input
+            type="text"
+            ref={branch}
+            className="outline-none border border-blue-200 shadow-md p-2 rounded-lg w-24"
+            name="branch"
+            id=""
+            placeholder="master"
+          />
 
           <button
             className="p-4 text-blue-100 bg-blue-600 rounded-lg hover:bg-blue-700 active:bg-blue-900"
@@ -76,12 +87,12 @@ function Home() {
             Submit
           </button>
         </div>
-
       </div>
 
-      <h1 className="px-20 text-3xl text-neutral-900 mt-10">List of your packages:</h1>
+      <h1 className="px-20 text-3xl text-neutral-900 mt-10">
+        List of your packages:
+      </h1>
       <div className=" px-10 pb-20 pt-10 grid grid-cols-3 gap-12 container mx-auto">
-
         {packages.length === 0 ? (
           <p>Its empty</p>
         ) : (
@@ -108,17 +119,31 @@ function Home() {
               <p className="text-slate-600 py-4 flex justify-center">
                 Github Stats
               </p>
-              <div class="flex flex-row items-center justify-between py-4 text-xs text-slate-700" >
-                <p className="flex flex-row items-center gap-1"><i className="fa-solid fa-star text-base text-[#9c7140]"></i><span className="text-yellow-900 text-lg font-semibold">{item.starsCount}</span></p>
+              <div class="flex flex-row items-center justify-between py-4 text-xs text-slate-700">
+                <p className="flex flex-row items-center gap-1">
+                  <i className="fa-solid fa-star text-base text-[#9c7140]"></i>
+                  <span className="text-yellow-900 text-lg font-semibold">
+                    {item.starsCount}
+                  </span>
+                </p>
 
-                <p className="flex flex-row items-center gap-1"><i className="fa-solid fa-code-commit text-base text-[#9c7140]"></i><span className="text-yellow-900 text-lg font-semibold">{item.forksCount}</span></p>
+                <p className="flex flex-row items-center gap-1">
+                  <i className="fa-solid fa-code-commit text-base text-[#9c7140]"></i>
+                  <span className="text-yellow-900 text-lg font-semibold">
+                    {item.forksCount}
+                  </span>
+                </p>
 
-                <p className="flex flex-row items-center gap-1"><i className="fa-solid fa-user-group text-base text-[#9c7140]"></i><span className="text-yellow-900 text-lg font-semibold">{item.subscribersCount}</span></p>
+                <p className="flex flex-row items-center gap-1">
+                  <i className="fa-solid fa-user-group text-base text-[#9c7140]"></i>
+                  <span className="text-yellow-900 text-lg font-semibold">
+                    {item.subscribersCount}
+                  </span>
+                </p>
               </div>
 
               <div class="flex flex-row items-center justify-between py-4">
                 <a href={`${item.issues}`} target="_blank">
-
                   <p class="text-red-900">Issues</p>
                 </a>
                 <p class="text-xl font-bold text-red-700">78</p>
@@ -127,41 +152,35 @@ function Home() {
               <p class="pb-3 text-slate-700">Dependencies:</p>
               <div class="grid grid-cols-2 place-items-start items-center gap-4">
                 {item.dependencies.map((i, k) => {
-
-                  if (i.includes('@')) {
-
+                  if (i.includes("@")) {
                     return (
-                      <a href={`/package-dependencies/${i.split("/")[0].slice(1)}`} key={k}>
-                        <p
-
-                          class="col-span-1 rounded-full bg-slate-50 py-1 px-4 font-semibold text-slate-700"
-                        >
+                      <a
+                        href={`/package-dependencies/${i
+                          .split("/")[0]
+                          .slice(1)}`}
+                        key={k}
+                      >
+                        <p class="col-span-1 rounded-full bg-slate-50 py-1 px-4 font-semibold text-slate-700">
                           {i}
                         </p>
                       </a>
-                    )
-                  }
-                  else {
+                    );
+                  } else {
                     return (
                       <a href={`/package-dependencies/${i}`} key={k}>
-                        <p
-
-                          class="col-span-1 rounded-full bg-slate-50 py-1 px-4 font-semibold text-slate-700"
-                        >
+                        <p class="col-span-1 rounded-full bg-slate-50 py-1 px-4 font-semibold text-slate-700">
                           {i}
                         </p>
                       </a>
-                    )
+                    );
                   }
-
-
                 })}
               </div>
             </div>
           ))
         )}
       </div>
-    </div >
+    </div>
   );
 }
 export default Home;
