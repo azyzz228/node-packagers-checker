@@ -3,73 +3,102 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import convert_date from "../helpers/convert_date";
 import package_info_object from "../helpers/package_info_object";
+import PackageInfo from "./PackageInfo";
 
 
 function PackageDependencies() {
   const { slug } = useParams();
   const [packages, setPackages] = useState(null);
-  let metadata;
 
-  const loading_handler = async () => {
-    let npm_link = await axios.get(
-      `https://api.npms.io/v2/package/${slug}`
-    );
-    if (npm_link.status !== 200) {
-      alert("You provided broken link");
+  const encode = async (obj) => {
+    console.log(obj);
+
+    let metadata, github
+    metadata = obj.collected.metadata
+    github = obj.collected.github;
+    let starsCount_c = "", forksCount_c = "", subscribersCount_c = "";
+    const name_c = obj.collected.metadata.name === undefined ? "undefined" : obj.collected.metadata.name;
+    const description_c = obj.collected.metadata.description === undefined ? "undefined" : obj.collected.metadata.description;
+    const dependencies_c = obj.collected.metadata.dependencies === undefined ? [] : Object.keys(obj.collected.metadata.dependencies);
+    const date_c = obj.collected.metadata.date === undefined ? "undefined" : convert_date(obj.collected.metadata.date);
+
+    if (obj.collected.github === undefined) {
+      starsCount_c = "undefined";
+      forksCount_c = "undefined";
+      subscribersCount_c = "undefined";
+    } else {
+      starsCount_c = obj.collected.github.starsCount === undefined ? "undefined" : obj.collected.github.starsCount;
+      forksCount_c = obj.collected.github.forksCount === undefined ? "undefined" : obj.collected.github.forksCount;
+      subscribersCount_c = obj.collected.github.subscribersCount === undefined ? "undefined" : obj.collected.github.subscribersCount;
     }
 
-    return npm_link.data;
-    // metadata = npm_link.data.collected.metadata;
-    // console.log(metadata);
+    const repository_c = obj.collected.metadata.links.repository === undefined ? "undefined" : obj.collected.metadata.links.repository;
+    const bugs_c = obj.collected.metadata.links.bugs === undefined ? "undefined" : obj.collected.metadata.links.bugs;
+
+
+    let data = package_info_object(
+      name_c, description_c, dependencies_c, repository_c, bugs_c, date_c, starsCount_c, forksCount_c, subscribersCount_c
+    )
+    console.log(data);
+    return data;
+    //   setPackages(
+    // )
+
   }
+
 
   useEffect(() => {
 
-    fetch(`https://api.npms.io/v2/package/${slug}`).then(function (response) {
-      return response.json();
-    }).then((res) => {
-      metadata = res.collected.metadata
-      console.log(metadata);
-      if (metadata.dependencies === undefined) {
-        setPackages(
-          package_info_object(
-            metadata.name,
-            metadata.description,
-            [],
-            metadata.links.repository,
-            metadata.links.bugs,
-            convert_date(metadata.date)
-          ))
-      }
-      else {
-        setPackages(
-          package_info_object(
-            metadata.name,
-            metadata.description,
-            Object.keys(metadata.dependencies),
-            metadata.links.repository,
-            metadata.links.bugs,
-            convert_date(metadata.date)
-          ))
-      }
-
-
+    const fetch_details = async () => {
+      const url = `https://api.npms.io/v2/package/${slug}`
+      const resp = await fetch(url);
+      const body = await resp.json();
+      return body
+    }
+    fetch_details().then(async res => {
+      const results = await encode(res);
+      console.error(results);
+      setPackages(results);
+      console.warn(packages);
     })
 
-    // loading_handler().then((res) => {
-    //   metadata = res.metadata;
-    //   setPackages(
-    //     package_info_object(
-    //       metadata.collected.metadata.name,
-    //       metadata.collected.metadata.description,
-    //       Object.keys(metadata.collected.metadata.dependencies),
-    //       metadata.collected.metadata.links.repository,
-    //       metadata.collected.metadata.links.bugs,
-    //       convert_date(metadata.collected.metadata.date)
-    //     ))
-    // }
-    // )
+    // fetch(`https://api.npms.io/v2/package/${slug}`).then(function (response) {
+    //   return response.json();
+    // }).then((res) => {
+    //   metadata = res.collected.metadata
+    //   github = res.collected.github;
+    //   console.warn(res);
+    //   if (metadata.dependencies === undefined) {
+    //     setPackages(
+    //       package_info_object(
+    //         metadata.name,
+    //         metadata.description,
+    //         [],
+    //         metadata.links.repository,
+    //         metadata.links.bugs,
+    //         convert_date(metadata.date),
+    //         github.starsCount,
+    //         github.forksCount,
+    //         github.subscribersCount,
+    //       ))
+    //   }
+    //   else {
+    //     setPackages(
+    //       package_info_object(
+    //         metadata.name,
+    //         metadata.description,
+    //         Object.keys(metadata.dependencies),
+    //         metadata.links.repository,
+    //         metadata.links.bugs,
+    //         convert_date(metadata.date),
+    //         github.starsCount,
+    //         github.forksCount,
+    //         github.subscribersCount,
+    //       ))
+    //   }
 
+
+    // })
 
   }, [])
 
@@ -84,72 +113,108 @@ function PackageDependencies() {
         {packages === null ? (
           <p>Loading...</p>
         ) : (
+          <>
 
-          <div
+            <div
 
-            className="max-w-2xl rounded-t-lg rounded-b-md border border-t-4 border-slate-100 border-t-blue-400 px-8 py-4 shadow-lg"
-          >
-            <div className="flex flex-row items-center justify-between border-b pb-4">
+              className="max-w-2xl rounded-t-lg rounded-b-md border border-t-4 border-slate-100 border-t-blue-400 px-8 py-4 shadow-lg"
+            >
+              <div className="flex flex-row items-center justify-between border-b pb-4">
 
-              <h1 className="text-2xl font-semibold text-slate-700 hover:underline">
-                {packages.name}
-              </h1>
+                {
+                  packages.github === "undefined" ? (
 
-              <div className="flex flex-col items-end">
-                <p className="text-sm text-slate-600">Last updated</p>
-                <p className="text-lg font-bold text-slate-800">{packages.date}</p>
+                    <h1 className="text-2xl font-semibold text-slate-700">
+                      {packages.name}
+                    </h1>
+
+                  ) : (
+                    <a href={packages.github} target={"_blank"}>
+                      <h1 className="text-2xl font-semibold text-slate-700 hover:underline">
+                        {packages.name}
+                      </h1>
+                    </a>
+                  )
+                }
+
+
+
+                <div className="flex flex-col items-end">
+                  <p className="text-sm text-slate-600">Last updated</p>
+                  <p className="text-lg font-bold text-slate-800">{packages.date}</p>
+                </div>
               </div>
-            </div>
 
-            <p className="border-b border-slate-100 py-4 text-slate-700">
-              {packages.description}
-            </p>
-            <div className="flex flex-row items-center justify-between py-4">
-              <a href={`${packages.issuesLink}`}>
-                {" "}
-                <p className="text-red-900">Issues</p>
-              </a>
-              <p className="text-xl font-bold text-red-700">78</p>
-            </div>
+              <p className="border-b border-slate-100 py-4 text-slate-700">
+                {packages.description}
+              </p>
+              <p className="text-slate-600 py-4 flex justify-center">
+                Github Stats
+              </p>
+              <div class="flex flex-row items-center justify-between py-4 text-xs text-slate-700" >
+                <p className="flex flex-row items-center gap-1"><i className="fa-solid fa-star text-base text-[#9c7140]"></i><span className="text-yellow-900 text-lg font-semibold">{packages.starsCount}</span></p>
 
-            <p className="pb-3 text-slate-700">Dependencies:</p>
-            <div className="grid grid-cols-3 place-items-start items-center gap-4">
-              {packages.dependencies.length == 0 ? (<p>No dependencies :smile:</p>) :
-                (
-                  packages.dependencies.map((i, k) => {
-                    if (i.includes('@')) {
+                <p className="flex flex-row items-center gap-1"><i className="fa-solid fa-code-commit text-base text-[#9c7140]"></i><span className="text-yellow-900 text-lg font-semibold">{packages.forksCount}</span></p>
 
-                      return (
-                        <a href={`/package-dependencies/${i.split("/")[0].slice(1)}`} key={k}>
-                          <p
+                <p className="flex flex-row items-center gap-1"><i className="fa-solid fa-user-group text-base text-[#9c7140]"></i><span className="text-yellow-900 text-lg font-semibold">{packages.subscribersCount}</span></p>
+              </div>
 
-                            class="col-span-1 rounded-full bg-slate-50 py-1 px-4 font-semibold text-slate-700"
-                          >
-                            {i}
-                          </p>
-                        </a>
-                      )
-                    }
-                    else {
-                      return (
-                        <a href={`/package-dependencies/${i}`} key={k}>
-                          <p
-
-                            class="col-span-1 rounded-full bg-slate-50 py-1 px-4 font-semibold text-slate-700"
-                          >
-                            {i}
-                          </p>
-                        </a>
-                      )
-                    }
-
-                  })
+              {
+                packages.issues === "undefined" ? (
+                  <div class="flex flex-row items-center justify-start gap-2 hover:gap-3 py-4">
+                    <p class="text-slate-700 ">Welp... Can't seems to find its github page</p>
+                  </div>
+                ) : (
+                  <a href={`${packages.issues}`} target="_blank" className="cursor-pointer">
+                    <div class="flex flex-row items-center justify-start gap-2 hover:gap-3 py-4">
+                      <p class="text-red-900 font-semibold">See all issues</p>
+                      <i class="fa-solid fa-arrow-right text-base text-[#632c2c]"></i>
+                    </div>
+                  </a>
                 )
               }
 
-            </div>
-          </div>
 
+
+              <p className=" mt-4 pb-3 text-slate-700">Dependencies:</p>
+              <div className="grid grid-cols-3 place-items-start items-center overflow-auto gap-4">
+                {packages.dependencies.length === 0 ? (<p>No dependencies found</p>) :
+                  (
+                    packages.dependencies.map((i, k) => {
+                      if (i.includes('@')) {
+
+                        return (
+                          <a href={`/package-dependencies/${i.split("/")[0].slice(1)}`} key={k}>
+                            <p
+
+                              class="col-span-1 rounded-full bg-slate-50 py-1 px-4 font-semibold text-slate-700"
+                            >
+                              {i}
+                            </p>
+                          </a>
+                        )
+                      }
+                      else {
+                        return (
+                          <a href={`/package-dependencies/${i}`} key={k}>
+                            <p
+
+                              class="col-span-1 rounded-full bg-slate-50 py-1 px-4 font-semibold text-slate-700"
+                            >
+                              {i}
+                            </p>
+                          </a>
+                        )
+                      }
+
+                    })
+                  )
+                }
+
+              </div>
+            </div>
+
+          </>
         )}
       </div>
 
