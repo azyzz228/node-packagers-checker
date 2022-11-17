@@ -1,70 +1,68 @@
-# Getting Started with Create React App
+![header-img](https://res.cloudinary.com/dz37h4oq1/image/upload/v1664143979/all/Group_8730_me0hk0.png)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Team Details:** 
 
-## Available Scripts
+- **Aziz Abdullaev:** [https://azizabdullaev.site ; https://github.com/azyzz228 ]
+- **Chukwuemeka Mba:** [https://www.emekr-tech.vercel.app; https://github.com/Chukwuemeka-Mba; emakamba10@gmail.com]
+- Both of us are 22.Fall.8 Pod members
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## Inspiration 🐧
+Many developers make use of the plethora packages that exist in the third party package ecosystem on their various projects. However, managing these packages can become cumbersome, tiring and at worst make one's project vulnerable to attacks.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+We built this project to help developers manage their packages better to help seamless and malware-less development.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
+## What it does 🥷🏾
 
-### `npm run build`
+The sole and primary aim of Eye of Packages is to help you track and manage your Node project's NPM packages and dependencies. Eye of Packages presents data on Github stats, last updated date, and the links to Github repo and issues for the package. It is aimed to help you identify potential incompatibilities as well as security threats that can come the obsolete packages. 
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The name eye of the package originated from the phrase **"keep an eye"** which is used to signify that one is tracking or monitoring something. Which means that with our node package tracker you can keep an eye on all the packages and/or dependencies you used in building your project. 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+This will be beneficial for both the author of the project, the maintainer, contributors and the users.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+---
+## How we built it ❤️
+![tech-stack](https://res.cloudinary.com/dz37h4oq1/image/upload/v1664143982/all/tech_stack_xcts4u.png)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+This application was built with:
+- React Js
+- Tailwind css
+- Node Js
+- Javascript
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Challenges we ran into 🐞
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+There were lots of challenges on our way, but our primary challenge was in the assembly of the projects various endpoints and making them work together seamlessly. 
 
-## Learn More
+After we settled on the idea, we separated the work according to everyone's skills. Aziz was primarily working on the Backend-end, while Emeka set up integrations & frontend. We faced most challenges when we tried to allocate segregated chunks into one project. 
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Accomplishments that we're proud of 🙌
+- **A fully working prototype!:** This has been intense yet insightful. We are very proud to have designed and built an application within such a short timeframe.
+- **Learning how to collaborate on GitHub!:** Not all of us were familiar with making branches or making a PR and merging. This hackathon has fast-tracked the learning process and we are all now very comfortable in using GitHub!
+Learning new technology (like Tailwind CSS, routing in React, implementing sophisticated design features), meeting new people, debugging, debugging, and more debugging!
+The idea of helping developers to manage packages and making positive changes in the developer ecosystem.
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## What we learned 🤔
+For the technical part, we learned how to perform chained API calls with JS with its notoriously complicated Promises. We have also learned about how dates are formatted and how to convert dates from milliseconds after Jan 1 1970 0:00 UTC to actual dates like 25, Sep, 2022. Moreover, we have faced some issues when we were merging the front-end and backend. We also gave our level best to make the UI/UX look minimalistic and useful! Not to mention, documentations and help from Google for technologies we used.
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## What's next for Eye of Packages 🥁
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+We are aiming at developing our own APIs which will scrap data from Github and NPM. The APIs we have used are accurate but we believe we can be even more precise. Since both of us are very passionate about tackling the issue of helping developers to track their third party packages, it's easy to come up with a lot of ideas for new features (like we did at the beginning of this hackathon!).
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Public API endpoints we have used:
+* https://raw.githubusercontent.com/:username/:repo/:branch/package.json
+* https://api.npms.io/v2/:package/
