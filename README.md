@@ -5,7 +5,7 @@
 - **Aziz Abdullaev:** [https://azizabdullaev.site ; https://github.com/azyzz228 ]
 - **Chukwuemeka Mba:** [https://www.emekr-tech.vercel.app; https://github.com/Chukwuemeka-Mba; emakamba10@gmail.com]
 - Both of us are 22.Fall.8 Pod members
-
+- Demo https://eye-of-packages.netlify.app/
 ---
 
 ## Inspiration 🐧
