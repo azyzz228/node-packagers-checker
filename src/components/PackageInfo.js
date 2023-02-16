@@ -1,53 +1,17 @@
 import React, { useEffect, useState } from "react";
-import convert_date from "../helpers/convert_date";
-import package_info_object from "../helpers/package_info_object";
-
+import encodeGithubStats from "../helpers/encodeGithubStats";
 
 function PackageInfo({ item }) {
 
   const [encodedPackage, setEncodedPackage] = useState(null);
 
-  const encode = async (obj) => {
-
-    let starsCount_c = "", forksCount_c = "", subscribersCount_c = "";
-    const name_c = obj.collected.metadata.name === undefined ? "undefined" : obj.collected.metadata.name;
-    const description_c = obj.collected.metadata.description === undefined ? "undefined" : obj.collected.metadata.description;
-    const dependencies_c = obj.collected.metadata.dependencies === undefined ? [] : Object.keys(obj.collected.metadata.dependencies);
-    const date_c = obj.collected.metadata.date === undefined ? "undefined" : convert_date(obj.collected.metadata.date);
-
-    if (obj.collected.github === undefined) {
-      starsCount_c = "undefined";
-      forksCount_c = "undefined";
-      subscribersCount_c = "undefined";
-    } else {
-      starsCount_c = obj.collected.github.starsCount === undefined ? "undefined" : obj.collected.github.starsCount;
-      forksCount_c = obj.collected.github.forksCount === undefined ? "undefined" : obj.collected.github.forksCount;
-      subscribersCount_c = obj.collected.github.subscribersCount === undefined ? "undefined" : obj.collected.github.subscribersCount;
-    }
-
-    const repository_c = obj.collected.metadata.links.repository === undefined ? "undefined" : obj.collected.metadata.links.repository;
-    const bugs_c = obj.collected.metadata.links.bugs === undefined ? "undefined" : obj.collected.metadata.links.bugs;
-
-
-    let data = package_info_object(
-      name_c, description_c, dependencies_c, repository_c, bugs_c, date_c, starsCount_c, forksCount_c, subscribersCount_c
-    )
-    console.log(data);
-    return data;
-
-  }
   useEffect(() => {
-
     const load = async () => {
-      const results = await encode(item);
-
-      // setPackage(results);
-      // console.warn(packages);
+      const results = await encodeGithubStats(item);
       setEncodedPackage(results)
     }
+
     load();
-
-
   }, [])
 
 

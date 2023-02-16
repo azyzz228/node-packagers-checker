@@ -1,4 +1,4 @@
-function package_info_object(name, description, dependencies, github, issues, date, starsCount, forksCount, subscribersCount) {
+function convertToObject(name, description, dependencies, github, issues, date, starsCount, forksCount, subscribersCount) {
     return {
         name,
         description,
@@ -12,4 +12,4 @@ function package_info_object(name, description, dependencies, github, issues, da
     };
 }
 
-export default package_info_object;
+export default convertToObject;
